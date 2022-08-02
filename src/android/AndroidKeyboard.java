@@ -34,14 +34,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 
-// import android.graphics.Color;
-// import org.apache.cordova.CordovaArgs;
-
-// import org.apache.cordova.LOG;
-// import java.util.Arrays;
-
-
-
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -60,21 +52,12 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.PopupWindow;
 
 import android.view.WindowInsets;
-// import com.google.gson.Gson;
 
-class Person{
-     
-    String name;    // имя
-    int age;        // возраст
 
-    Person(){
-        name = "Undefined";
-        age = 18;
-    }
-}
+
 
 public class AndroidKeyboard extends CordovaPlugin {
-    /* Constructor */
+    
     private static final String LOG_TAG = "AndroidKeyboard";
 
     public AndroidKeyboard() {   };
@@ -95,43 +78,16 @@ public class AndroidKeyboard extends CordovaPlugin {
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
 
-  
-
         this.initKeyboardEvent();
-
-
-        // PluginResult dataResult = new PluginResult(PluginResult.Status.OK, "Тест текст");
-        // dataResult.setKeepCallback(true);
-        // cordova.setActivityResultCallback(this);
-
-
-        //http://stackoverflow.com/a/4737265/1091751 detect if keyboard is showing
-    
-
-        
-
-    // appView.sendJavascript("cordova.plugins.AndroidKeyboard.initHeight = (cb) => cb(" + Integer.toString(keyboardHeight) + ");" );
 
     }
 
     
 
-
-    /*
-     * через execute предполагаем что будет вызываться через js и вызываем методы в
-     * java
-     */
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         
-        /* Получение аргументов. В зависимости от передаваемого типа выбираем что хотим
-            тут получать
-            int args1 = args.getInt(0);
-            int args2 = args.getInt(1);
-            String message = args.getString(0);
-             callbackContext Если хотим передавать значения из java в js 
-        */
-        
+
      
         final Activity activity = this.cordova.getActivity();
         InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
