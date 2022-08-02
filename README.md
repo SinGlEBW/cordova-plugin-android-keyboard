@@ -1,9 +1,4 @@
----
-title: Cordova Plugin AndroidKeyboard
----
-
-
-# cordova-plugin-android-keyboard
+# Cordova Plugin AndroidKeyboard
 
 <!-- [![Android Testsuite](https://github.com/SinGlEBW/cordova-plugin-android-keyboard.git)](https://github.com/SinGlEBW/cordova-plugin-android-keyboard.git)  -->
 
