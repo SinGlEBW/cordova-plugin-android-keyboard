@@ -155,17 +155,17 @@ public class AndroidKeyboard extends CordovaPlugin {
         }
 
 
-        if (action.equals("show")) {
-            imm.showSoftInput(view, 0);
-            callbackContext.success();
-            return true;
-        }
+        // if (action.equals("show")) {
+        //     imm.showSoftInput(view, 0);
+        //     callbackContext.success();
+        //     return true;
+        // }
 
-        if (action.equals("hide")) {
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            callbackContext.success();
-            return true;
-        }
+        // if (action.equals("hide")) {
+        //     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        //     callbackContext.success();
+        //     return true;
+        // }
 
         if (action.equals("getHeight")) {
             callbackContext.success(initHeight);

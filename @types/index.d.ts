@@ -11,8 +11,8 @@ interface AndroidKeyboard {
   on(nameEvent: nameEvent, cbSuccess: cbSuccess): void;
   off(nameEvent: nameEvent): void;
 
-  hide(): void;
-  show(): void;
+  // hide(): void;
+  // show(): void;
 
 }
 

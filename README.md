@@ -5,7 +5,7 @@ title: Cordova Plugin AndroidKeyboard
 
 # cordova-plugin-android-keyboard
 
-[![Android Testsuite](https://github.com/SinGlEBW/cordova-plugin-android-keyboard.git)](https://github.com/SinGlEBW/cordova-plugin-android-keyboard.git) 
+<!-- [![Android Testsuite](https://github.com/SinGlEBW/cordova-plugin-android-keyboard.git)](https://github.com/SinGlEBW/cordova-plugin-android-keyboard.git)  -->
 
 
 
@@ -49,6 +49,4 @@ If you need an event to open and close the keyboard, then use:
     //remove event
     AndroidKeyboard.off('keyboard');
   }
-```
-There is also a manual control functionality: AndroidKeyboard.show(), AndroidKeyboard.hide()
 ```
