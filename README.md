@@ -20,17 +20,6 @@ This installation method requires cordova 10.0+
 
 Use plugin cordova-plugin-statusbar and use overlaysWebView = true and config.xml <preference name="StatusBarOverlaysWebView" value="true" />;
 
-```js
-let AndroidKeyboard = cordova.plugins.AndroidKeyboard;
-
-  if (cordova.platformId == 'android') {
-    AndroidKeyboard.getHeight((height) => {
-      console.log('initKeyboardHeight: ', height);
-    });
-  }
-
-
-```
 
 If you need an event to open and close the keyboard, then use:
 

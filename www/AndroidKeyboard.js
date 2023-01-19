@@ -13,15 +13,15 @@ let AndroidKeyboard = {
     //     exec(null, null, classInJava, 'show', []);
     // },
 
-    getHeight: function (cb) {
-        exec(cb, null, classInJava, 'getHeight', []);
-    },
+    // getHeight: function (cb) {
+    //     exec(cb, null, classInJava, 'getHeight', []);
+    // },
 
     on: function(nameEvent, cbSuccess) {
-        let success = function(message) {   cbSuccess(message);  };
+        // let success = function(message) {   cbSuccess(message);  };
 
         if(nameEvent === 'keyboard'){
-            exec(success, null, classInJava, "on", []);
+            exec(cbSuccess, null, classInJava, "on", []);
         }
 
     },

@@ -1,22 +1,25 @@
 {
-  "name": "cordova-plugin-android-keyboard",
-  "version": "1.0.3",
-  "description": "",
-  "types": "./@types/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/SinGlEBW/cordova-plugin-android-keyboard"
-  },
-  "cordova": {
-    "id": "cordova-plugin-android-keyboard",
-    "platforms": [
-      "android"
-    ]
-  },
-  "keywords": [
-    "ecosystem:cordova",
-    "cordova-android"
-  ],
-  "author": "SinGlEBW",
-  "license": "ISC"
+ "name": "cordova-plugin-android-keyboard",
+ "version": "1.0.5",
+ "description": "",
+ "types": "./@types/index.d.ts",
+ "repository": {
+  "type": "git",
+  "url": "https://github.com/SinGlEBW/cordova-plugin-android-keyboard"
+ },
+ "scripts": {
+  "push": "git add . && git ct -m update && git push"
+ },
+ "cordova": {
+  "id": "cordova-plugin-android-keyboard",
+  "platforms": [
+   "android"
+  ]
+ },
+ "keywords": [
+  "ecosystem:cordova",
+  "cordova-android"
+ ],
+ "author": "SinGlEBW",
+ "license": "ISC"
 }
