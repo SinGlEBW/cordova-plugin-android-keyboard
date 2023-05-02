@@ -1,6 +1,6 @@
 {
  "name": "cordova-plugin-android-keyboard",
- "version": "1.0.5",
+ "version": "1.0.12",
  "description": "",
  "types": "./@types/index.d.ts",
  "repository": {
@@ -8,7 +8,7 @@
   "url": "https://github.com/SinGlEBW/cordova-plugin-android-keyboard"
  },
  "scripts": {
-  "push": "git add . && git ct -m update && git push"
+  "push": "git add . && git ct -m update && git push && npm publish"
  },
  "cordova": {
   "id": "cordova-plugin-android-keyboard",

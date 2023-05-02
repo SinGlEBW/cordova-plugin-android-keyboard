@@ -1,4 +1,3 @@
-
 package ru.cordova.android.keyboard;
 
 import org.apache.cordova.CordovaPlugin;
@@ -74,14 +73,24 @@ public class AndroidKeyboard extends CordovaPlugin {
     private int heightOfKeyboard = 0;
     private int previousHeightDiffrence = 0;
     private boolean isKeyBoardVisible = false;
-
+    private CordovaWebView webView;
 
     private CallbackContext callbackContextKeyboard = null;
     BroadcastReceiver receiver;
 
-    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-        super.initialize(cordova, webView);
+    public void initialize(CordovaInterface cordova, CordovaWebView cordovaWebView) {
+        super.initialize(cordova, cordovaWebView);
+        webView = cordovaWebView;
         this.initKeyboardEvent();
+
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+//        setTimeout(() -> imm.hideSoftInputFromWindow(finalView.getWindowToken(), 0), 5);
+
     }
 
     @Override
@@ -90,8 +99,21 @@ public class AndroidKeyboard extends CordovaPlugin {
         final Activity activity = this.cordova.getActivity();
         InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         final Window window = activity.getWindow();
-        View view = window.getDecorView();
-      
+
+        View view;
+        try {
+            view = (View)webView.getClass().getMethod("getView").invoke(webView);
+        }
+        catch (Exception e){
+            view = (View)webView;
+        }
+
+
+//        WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(activity.getWindow().getDecorView());
+////Enjoy your keyboard height
+//        initHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+
+
         if(action.equals("on")){
             isWatchEvent = true;
             this.callbackContextKeyboard = callbackContext;
@@ -105,30 +127,27 @@ public class AndroidKeyboard extends CordovaPlugin {
             callbackContext.success();
             return true;
         }
+        
+        if (action.equals("show")) {
+            imm.showSoftInput(view, 0);
+            callbackContext.success();
+            return true;
+        }
 
+        if (action.equals("hide")) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            callbackContext.success();
+            return true;
+        }
 
-        // if (action.equals("show")) {
-        //     imm.showSoftInput(view, 0);
-        //     callbackContext.success();
-        //     return true;
-        // }
-
-        // if (action.equals("hide")) {
-        //     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        //     callbackContext.success();
-        //     return true;
-        // }
-
-        // if (action.equals("getHeight")) {
-        //     callbackContext.success(initHeight);
-        //     return true;
-        // }
+        if (action.equals("getHeight")) {
+            callbackContext.success(initHeight);
+            return true;
+        }
 
         return false;
-
     }
 
-  
 
     private void sendResult(JSONObject info, boolean keepCallback) {
         if (this.callbackContextKeyboard != null) {
@@ -137,7 +156,16 @@ public class AndroidKeyboard extends CordovaPlugin {
             this.callbackContextKeyboard.sendPluginResult(result);
         }
     }
-
+    private static void setTimeout(Runnable runnable, int delay) {
+        new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+                runnable.run();
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        }).start();
+    }
 
     public int dpToPx(Resources resources, int dp) {
         DisplayMetrics displayMetrics = resources.getDisplayMetrics();
@@ -163,11 +191,12 @@ public class AndroidKeyboard extends CordovaPlugin {
         */
 
         AndroidKeyboard _this = this;
-        final View rootView = this.cordova.getActivity().getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
-
+        final Activity activity = this.cordova.getActivity();
+//        final View rootView = activity.getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
+        final View rootView = activity.getWindow().getDecorView();
         Resources resources = rootView.getResources();
 
-        
+
         int statusBarId = resources.getIdentifier("status_bar_height", "dimen", "android");
         int navigationBarId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
 
@@ -181,30 +210,52 @@ public class AndroidKeyboard extends CordovaPlugin {
         OnGlobalLayoutListener listener = new OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+                boolean isOpen = false;
 
             	Rect rect = new Rect();
                 rootView.getWindowVisibleDisplayFrame(rect);//Наполняет объект rect данными Display размерами, но в своей единицы измерения dp
-             
-                boolean isOpen = false;
 
                 int heightApp = rootView.getRootView().getHeight();//rootView.getMeasuredHeight();//dp. height можно получить так: rootView.getRootView().getHeight();
                 int htmlDp = (heightApp - navigatorBarSize);//Высота html в DevTools без navBar. Клавиатуру высчитываем без navBar. Статик
-        
                 int staticHeightHTML = dpToPx(resources, htmlDp);
-
-            
-                int paddingBottom = rootView.getBottom();
                 int dynamicHeightHtml =  dpToPx(resources, rect.bottom);
-                /* Высота html после открытия клавиатуры */
-                int heightKeyboard = Math.round(staticHeightHTML - dynamicHeightHtml);
-            
 
+
+//                int keyBoardHeight = (screenHeight - (r.bottom - r.top));
+//                int heightKeyboardPxTest =  dpToPx(resources, keyBoardHeight - navigatorBarSize);
+//                int paddingBottom = rootView.getBottom();
+
+
+                int heightKeyboard = 0;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                    WindowCompat.setDecorFitsSystemWindows(activity.getWindow(), false);
+                    WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(activity.getWindow().getDecorView());
+                    /*Получает целиком высоту клавиатуры + navBar*/
+                    int keyboardHeightDp = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+
+                    if(keyboardHeightDp != 0){
+                        if(Build.MODEL.equals("SM-G780G")){
+                            /* На samsung SM-G780G значение status_bar вычитаеться при расчёте отступа снизу. Для корректного значения прибавляем */
+                            keyboardHeightDp = keyboardHeightDp + statusBarSize;
+                        }
+                        //Получим только размер клавиатуры за вычетом navBar и преобразуем в px.
+                        heightKeyboard =  dpToPx(resources, keyboardHeightDp - navigatorBarSize);
+                    }
+                }else{
+                    heightKeyboard = Math.round(staticHeightHTML - dynamicHeightHtml);
+                }
+
+//                heightKeyboard = Math.round(staticHeightHTML - dynamicHeightHtml);
+                /*-----------------------------------------------------------------------*/
 
                 if(isWatchEvent){
                     JSONObject payloadEvent = new JSONObject();
 
                     try {
                         if(!isOpenedKeyboard && heightKeyboard > 0){
+                            if(initHeight == 0){
+                                initHeight = heightKeyboard;
+                            }
                             payloadEvent.put("height", heightKeyboard);
                             payloadEvent.put("isShow", true);
                             isOpenedKeyboard = true;
@@ -236,9 +287,6 @@ public class AndroidKeyboard extends CordovaPlugin {
     }
 
 
- 
-
- 
 }
 
 
