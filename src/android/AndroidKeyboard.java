@@ -216,13 +216,18 @@ public class AndroidKeyboard extends CordovaPlugin {
                 rootView.getWindowVisibleDisplayFrame(rect);//Наполняет объект rect данными Display размерами, но в своей единицы измерения dp
 
                 int heightApp = rootView.getRootView().getHeight();//rootView.getMeasuredHeight();//dp. height можно получить так: rootView.getRootView().getHeight();
-                int htmlDp = (heightApp - navigatorBarSize);//Высота html в DevTools без navBar. Клавиатуру высчитываем без navBar. Статик
+                int heightNavBarDP = navigatorBarSize;
+                if(resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                    heightNavBarDP = 0;
+                }
+                int htmlDp = (heightApp - heightNavBarDP);//Высота html в DevTools без navBar. Клавиатуру высчитываем без navBar. Статик
                 int staticHeightHTML = dpToPx(resources, htmlDp);
                 int dynamicHeightHtml =  dpToPx(resources, rect.bottom);
 
 
+
 //                int keyBoardHeight = (screenHeight - (r.bottom - r.top));
-//                int heightKeyboardPxTest =  dpToPx(resources, keyBoardHeight - navigatorBarSize);
+//                int heightKeyboardPxTest =  dpToPx(resources, keyBoardHeight - heightNavBarDP);
 //                int paddingBottom = rootView.getBottom();
 
 
@@ -239,7 +244,9 @@ public class AndroidKeyboard extends CordovaPlugin {
                             keyboardHeightDp = keyboardHeightDp + statusBarSize;
                         }
                         //Получим только размер клавиатуры за вычетом navBar и преобразуем в px.
-                        heightKeyboard =  dpToPx(resources, keyboardHeightDp - navigatorBarSize);
+
+
+                        heightKeyboard =  dpToPx(resources, keyboardHeightDp - heightNavBarDP);
                     }
                 }else{
                     heightKeyboard = Math.round(staticHeightHTML - dynamicHeightHtml);
